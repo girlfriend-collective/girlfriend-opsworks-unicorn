@@ -62,7 +62,7 @@ server {
     expires 1y;
     add_header cache-control public;
 
-    gzip_static on; # to serve pre-gzipped version
+    gzip_static off; # to serve pre-gzipped version
 
     # If you don't find the filename in the static files
     # Then request it from the unicorn server
