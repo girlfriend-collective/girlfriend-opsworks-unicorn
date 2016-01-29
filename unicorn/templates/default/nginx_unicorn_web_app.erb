@@ -29,7 +29,17 @@ server {
 
   location @unicorn {
     <% if node[:opsworks][:stack][:name].eql? 'girlfriend_prod' -%>
-    return 301 https://girlfriend.com$request_uri;
+      if ($http_x_forwarded_proto) {
+        set $forwardheader REDIRECT;
+      }
+
+      if ($http_x_forwarded_proto != "https") {
+        set $forwardheader "${forwardheader}_ME";
+      }
+
+      if ($forwardheader = REDIRECT_ME) {
+        return 301 https://girlfriend.com$request_uri;
+      }
     <% end -%>
 
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
